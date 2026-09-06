@@ -14,13 +14,11 @@ The tool uses [XMem Helper](https://github.com/daniilkorochansky/xmem-helper), w
 
 ## Features
 + Open `.package` files.
-+ Automatic `.database` detection.
 + Extract resources from packages.
 + Replace resources inside packages.
-+ Texture Converter.
-+ Localization Editor.
++ Build-in `Texture Converter`.
++ Build-in `Localization Editor`.
 + Package optimization.
-+ Automatic `.database` updating.
 + Append-only resource replacement.
 
 ## Table Of Contents
