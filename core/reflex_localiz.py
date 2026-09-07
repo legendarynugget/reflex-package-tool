@@ -1,11 +1,24 @@
-#!/usr/bin/env python3
-"""MX vs ATV Reflex .localiz codec.
+# -*- coding: utf-8 -*-
+# -------------------------------------------------------------------------------------------------------------------
+#   Reflex Package Tool — A tool for working with game archives for MX vs ATV Reflex in the .package format.
+#   Copyright (C) 2026  Daniil Korochansky
+#
+#   This file is part of Reflex Package Tool.
+#
+#   Reflex Package Tool is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   Reflex Package Tool is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Reflex Package Tool.  If not, see <https://www.gnu.org/licenses/>.
+# -------------------------------------------------------------------------------------------------------------------
 
-The module can be used both as a CLI and as a normal Python library.
-The parser understands the XMEM/decompression padding found after the exact
-resource payload and deliberately keeps that padding out of the in-memory
-model.
-"""
 from __future__ import annotations
 
 import argparse

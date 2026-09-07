@@ -47,6 +47,7 @@ jobs:
             --onefile ^
             --add-data "icon.ico;." ^
             --add-data "bxml_database_tool.py;." ^
+            --add-data "icons;icons" ^
             --windowed ^
             --name "Reflex Package Tool" ^
             --icon "icon.ico" ^

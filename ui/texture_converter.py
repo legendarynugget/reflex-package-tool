@@ -23,6 +23,8 @@ from __future__ import annotations
 
 import threading
 from pathlib import Path
+import os
+import sys
 
 import wx
 import wx.propgrid
@@ -33,6 +35,17 @@ import core.reflex_texture as texture_backend
 
 APP_NAME = "Texture Converter"
 
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+icons_folder = resource_path("icons")
+tc_open = os.path.join(icons_folder, "open.png")
+tc_convert = os.path.join(icons_folder, "convert.png")
+tc_close = os.path.join(icons_folder, "close.png")
 
 class TextureLoadProgress(wx.Dialog):
     """Small indeterminate progress dialog used while reading a texture."""
@@ -147,10 +160,7 @@ class TextureConverter(wx.Dialog):
         self.m_tool_OpenTexture = self.m_toolBar.AddTool(
             wx.ID_ANY,
             "Open...",
-            wx.ArtProvider.GetBitmap(
-                wx.ART_FILE_OPEN,
-                wx.ART_TOOLBAR,
-            ),
+            wx.Bitmap(tc_open,wx.BITMAP_TYPE_PNG),
             wx.NullBitmap,
             wx.ITEM_NORMAL,
             "Open a .texture file",
@@ -178,10 +188,7 @@ class TextureConverter(wx.Dialog):
         self.m_toolConvert = self.m_toolBar.AddTool(
             wx.ID_ANY,
             "Convert",
-            wx.ArtProvider.GetBitmap(
-                wx.ART_FILE_SAVE,
-                wx.ART_TOOLBAR,
-            ),
+            wx.Bitmap(tc_convert,wx.BITMAP_TYPE_PNG),
             wx.NullBitmap,
             wx.ITEM_NORMAL,
             'Converting ".texture" to ".dds" or ".dds" to ".texture"',
@@ -193,13 +200,10 @@ class TextureConverter(wx.Dialog):
         self.m_toolExit = self.m_toolBar.AddTool(
             wx.ID_ANY,
             "Close",
-            wx.ArtProvider.GetBitmap(
-                wx.ART_QUIT,
-                wx.ART_TOOLBAR,
-            ),
+            wx.Bitmap(tc_close,wx.BITMAP_TYPE_PNG),
             wx.NullBitmap,
             wx.ITEM_NORMAL,
-            'Close “Texture Converter”',
+            'Close texture converter',
             wx.EmptyString,
         )
 

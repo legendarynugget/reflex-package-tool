@@ -46,6 +46,7 @@ import wx.dataview as dv
 
 from ui.texture_converter import TextureConverter
 from ui.localiz_editor import LocalizationEditor
+from ui.soundbnk_manager import SoundBankManager
 
 APP_NAME = "Reflex Package Tool"
 
@@ -56,7 +57,12 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
 
-SOURCE_VERSION = "v1.3.2"
+icons_folder = resource_path("icons")
+rpt_open = os.path.join(icons_folder, "open.png")
+rpt_extract = os.path.join(icons_folder, "extract.png")
+rpt_replace = os.path.join(icons_folder, "replace.png")
+
+SOURCE_VERSION = "v1.3.3"
 
 BXML_HEADER = struct.Struct("<9I")
 BXML_SIGNATURE = 0x4C4D5842
@@ -2394,32 +2400,19 @@ class MainFrame(wx.Frame):
             style=wx.TB_HORIZONTAL | wx.TB_TEXT | wx.TB_FLAT | wx.TB_NODIVIDER,
         )
 
-        self.tool_open = toolbar.AddTool(
-            wx.ID_OPEN,
-            "Open...",
-            wx.ArtProvider.GetBitmap(
-                wx.ART_FILE_OPEN,
-                wx.ART_TOOLBAR,
-            ),
-        )
+        self.tool_open = toolbar.AddTool(wx.ID_OPEN,"Open...", wx.Bitmap(rpt_open,wx.BITMAP_TYPE_PNG))
         toolbar.SetToolShortHelp(self.tool_open.GetId(), "Open a .package archive")
         toolbar.AddSeparator()
         self.tool_extract = toolbar.AddTool(
             wx.ID_ANY,
             "Extract",
-            wx.ArtProvider.GetBitmap(
-                wx.ART_GO_UP,
-                wx.ART_TOOLBAR,
-            ),
+            wx.Bitmap(rpt_extract,wx.BITMAP_TYPE_PNG),
         )
-        toolbar.SetToolShortHelp(self.tool_extract.GetId(), "Export the selected resource from the list")
+        toolbar.SetToolShortHelp(self.tool_extract.GetId(), "Extract the selected resource from the list")
         self.tool_pack = toolbar.AddTool(
             wx.ID_ANY,
             "Replace",
-            wx.ArtProvider.GetBitmap(
-                wx.ART_GO_DOWN,
-                wx.ART_TOOLBAR,
-            ),
+            wx.Bitmap(rpt_replace,wx.BITMAP_TYPE_PNG),
         )
         toolbar.SetToolShortHelp(self.tool_pack.GetId(), "Replace the selected resource in the list")
         toolbar.Realize()
@@ -2443,8 +2436,8 @@ class MainFrame(wx.Frame):
         tools_menu = wx.Menu()
         tools_add_menu = wx.Menu()
         tools_tex_converter = tools_add_menu.Append(wx.ID_ANY, "Texture Converter...\tCtrl+1")
-        tools_add_menu.AppendSeparator()
-        tools_loc_editor = tools_add_menu.Append(wx.ID_ANY, "Localization Editor...")
+        tools_sound_manager = tools_add_menu.Append(wx.ID_ANY, "Sound Bank Manager...\tCtrl+2")
+        tools_loc_editor = tools_add_menu.Append(wx.ID_ANY, "Localization Editor...\tCtrl+3")
         tools_menu.AppendSubMenu(tools_add_menu, 'Additional')
         tools_menu.AppendSeparator()
         file_defragment = tools_menu.Append(wx.ID_ANY, "Package Optimization")
@@ -2463,6 +2456,7 @@ class MainFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.pack, file_pack)
         self.Bind(wx.EVT_MENU, self.open_texture_converter, tools_tex_converter)
         self.Bind(wx.EVT_MENU, self.open_localization_editor, tools_loc_editor)
+        self.Bind(wx.EVT_MENU, self.open_sound_bank_manager, tools_sound_manager)
         self.Bind(wx.EVT_MENU, self.defragment, file_defragment)
         self.Bind(wx.EVT_MENU, self.on_exit, file_exit)
         self.Bind(wx.EVT_MENU, self.show_about, help_about)
@@ -2523,8 +2517,8 @@ class MainFrame(wx.Frame):
         self.statusbar = self.CreateStatusBar(2)
         self.SetStatusBarPane(-1)
         self.SetStatusText("No package", 0)
-        self.SetStatusText("0 resources | 0 database matches", 1)
-        self.statusbar.SetStatusWidths([-1, 220])
+        self.SetStatusText("0 resources", 1)
+        self.statusbar.SetStatusWidths([-1, 80])
         self.statusbar.WindowStyle ^= wx.STB_SHOW_TIPS
 
         self.Bind(
@@ -2554,6 +2548,11 @@ class MainFrame(wx.Frame):
             dv.EVT_DATAVIEW_ITEM_ACTIVATED,
             self.extract_selected,
         )
+
+    def open_sound_bank_manager(self, event):
+        self.sb_manager = SoundBankManager(self)
+        self.sb_manager.Show()
+        self.sb_manager.Raise()
 
     def open_localization_editor(self, event):
         self.loc_editor = LocalizationEditor(self)
@@ -2682,8 +2681,7 @@ class MainFrame(wx.Frame):
         )
 
         self.SetStatusText(
-            f"{len(resources)} resources | "
-            f"{matched} database matches",
+            f"{len(resources)} resources",
             1,
         )
 
@@ -3083,7 +3081,7 @@ class MainFrame(wx.Frame):
     def show_about(self, event=None):
         wx.MessageBox(
             f"{APP_NAME}\n\n"
-            "A tool for working with game archives for MX vs ATV Reflex in the .package format.\n\nVersion: 1.3.2.1\nAuthor: Daniil Korochansky\nLicense: GPLv3.0",
+            "A tool for working with game archives for MX vs ATV Reflex in the .package format.\n\nVersion: 1.3.3\nAuthor: Daniil Korochansky\nLicense: GPLv3.0",
             "About",
             wx.OK | wx.ICON_INFORMATION,
         )

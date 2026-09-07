@@ -1,10 +1,30 @@
-
+# -*- coding: utf-8 -*-
+# -------------------------------------------------------------------------------------------------------------------
+#   Reflex Package Tool — A tool for working with game archives for MX vs ATV Reflex in the .package format.
+#   Copyright (C) 2026  Daniil Korochansky
+#
+#   This file is part of Reflex Package Tool.
+#
+#   Reflex Package Tool is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   Reflex Package Tool is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Reflex Package Tool.  If not, see <https://www.gnu.org/licenses/>.
+# -------------------------------------------------------------------------------------------------------------------
 
 from __future__ import annotations
 
 import sys
 from pathlib import Path
 from typing import Optional
+import os
 
 import wx
 import wx.dataview as dv
@@ -21,6 +41,17 @@ from core.reflex_localiz import (
 APP_TITLE = "Localization Editor"
 FILTER_PLACEHOLDER = "Search keys or values..."
 
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+icons_folder = resource_path("icons")
+le_open = os.path.join(icons_folder, "open.png")
+le_build = os.path.join(icons_folder, "build.png")
+le_close = os.path.join(icons_folder, "close.png")
 
 class LocalizationEditor(wx.Dialog):
 
@@ -66,22 +97,21 @@ class LocalizationEditor(wx.Dialog):
         # Native toolbar
         self.toolbar = wx.ToolBar(
             self,
-            style=wx.TB_HORIZONTAL | wx.TB_FLAT | wx.TB_TEXT,
+            style=wx.TB_HORIZONTAL | wx.TB_FLAT | wx.TB_TEXT | wx.TB_NODIVIDER,
         )
-        self.toolbar.SetToolBitmapSize(wx.Size(20, 20))
 
         self.open_tool = self.toolbar.AddTool(
             wx.ID_OPEN,
             "Open...",
-            wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR, wx.Size(20, 20)),
-            shortHelp="Open localization resource",
+            wx.Bitmap(le_open,wx.BITMAP_TYPE_PNG),
+            shortHelp="Open localization file",
         )
 
         self.save_as_tool = self.toolbar.AddTool(
             wx.ID_SAVEAS,
             "Build...",
-            wx.ArtProvider.GetBitmap(wx.ART_FILE_SAVE_AS, wx.ART_TOOLBAR, wx.Size(20, 20)),
-            shortHelp="Build a new localization resource",
+            wx.Bitmap(le_build,wx.BITMAP_TYPE_PNG),
+            shortHelp="Build a new localization file",
         )
 
         self.toolbar.AddSeparator()
@@ -89,8 +119,8 @@ class LocalizationEditor(wx.Dialog):
         self.close_tool = self.toolbar.AddTool(
             wx.ID_CLOSE,
             "Close",
-            wx.ArtProvider.GetBitmap(wx.ART_QUIT, wx.ART_TOOLBAR, wx.Size(20, 20)),
-            shortHelp="Close editor",
+            wx.Bitmap(le_close,wx.BITMAP_TYPE_PNG),
+            shortHelp="Close localization editor",
         )
 
         self.toolbar.Realize()
@@ -180,7 +210,7 @@ class LocalizationEditor(wx.Dialog):
         try:
             model = decode_file(path)
         except (OSError, ValueError, LocalizError, UnicodeError) as exc:
-            self._show_error("Unable to open localization resource", exc)
+            self._show_error("Unable to open localization file", exc)
             return False
 
         if self.modified and not self._confirm_discard():
@@ -207,7 +237,7 @@ class LocalizationEditor(wx.Dialog):
         try:
             encode_file(self.model, target)
         except (OSError, ValueError, LocalizError, UnicodeError) as exc:
-            self._show_error("Unable to save localization resource", exc)
+            self._show_error("Unable to save localization file", exc)
             return False
 
         self.output_path = target
@@ -228,8 +258,8 @@ class LocalizationEditor(wx.Dialog):
 
         with wx.FileDialog(
             self,
-            "Build Localization Resource",
-            wildcard="Localization resource (*.localiz)|*.localiz|All files (*.*)|*.*",
+            "Build Localization File",
+            wildcard="Localization files (*.localiz)|*.localiz|All files (*.*)|*.*",
             defaultFile=default_name,
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
         ) as dlg:
@@ -431,8 +461,8 @@ class LocalizationEditor(wx.Dialog):
     def _on_open(self, _event: wx.CommandEvent) -> None:
         with wx.FileDialog(
             self,
-            "Open Localization Resource",
-            wildcard="Localization resource (*.localiz)|*.localiz|All files (*.*)|*.*",
+            "Open Localization File",
+            wildcard="Localization files (*.localiz)|*.localiz|All files (*.*)|*.*",
             style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST,
         ) as dlg:
             if dlg.ShowModal() != wx.ID_OK:
