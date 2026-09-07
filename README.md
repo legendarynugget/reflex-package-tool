@@ -18,6 +18,7 @@ The tool uses [XMem Helper](https://github.com/daniilkorochansky/xmem-helper), w
 + Replace resources inside packages.
 + Build-in `Texture Converter`.
 + Build-in `Localization Editor`.
++ Build-in `Sound Bank Manager`.
 + Package optimization.
 + Append-only resource replacement.
 
