@@ -8,19 +8,17 @@
 <img width="766" height="433" alt="image" src="https://github.com/user-attachments/assets/66d9b494-dc28-41f5-a7ef-c9903c603f9a" />
 
 
-A tool for viewing, exporting, and replacing MX vs ATV Reflex game resources from .package game archives.
+A tool for viewing, extracting, and replacing MX vs ATV Reflex game resources from .package game archives.
 
 The tool uses [XMem Helper](https://github.com/daniilkorochansky/xmem-helper), which acts as a bridge between the 32-bit `mszip.dll` library and the 64-bit operating system.
 
 ## Features
 + Open `.package` files.
-+ Automatic `.database` detection.
 + Extract resources from packages.
 + Replace resources inside packages.
-+ Texture Converter.
-+ Localization Editor.
++ Build-in `Texture Converter`.
++ Build-in `Localization Editor`.
 + Package optimization.
-+ Automatic `.database` updating.
 + Append-only resource replacement.
 
 ## Table Of Contents
@@ -62,13 +60,14 @@ Optimizing the .package file by repackaging the used data blocks into a new .pac
 + **.sound** - It may describe which audio file, where, and when to play it?
 + **.anim** - Animation file
 + **.shader** - Shaders responsible for visual effects.
++ **.cell** - Description of font glyph cells
++ **.texatlas** - Describes a set of rectangular areas within the font’s texture atlas.
 + **.tree** - ?
 + **.forest** - ?
 + **.water** - ?
 + **.icongeom** - ?
 + **.tdf** - ?
-+ **.texatlas** - ?
-+ **.cell** - ?
+
 
 ## Other Tools
 + [Reflex BXML Editor](https://github.com/daniilkorochansky/reflex-bxml-editor): It allows you to edit `.bxml`, `.database`, `.level` and `savegame.bxml` files and rebuild them.
