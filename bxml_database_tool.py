@@ -389,10 +389,29 @@ def database_assets(parsed: Parsed) -> list[dict]:
                 )
 
             compress = asset.find("Compress")
-            compressed = compress is not None
             codec = None
+            compress_enabled = None
+
             if compress is not None:
                 codec = compress.get("codec")
+                compress_enabled = compress.get("enabled")
+
+            compressed = True
+
+            if compress is not None and compress.get("enabled") is not None:
+                enabled = str(compress.get("enabled")).strip().lower()
+
+                if enabled in {
+                    "_bool:false",
+                    "false",
+                    "0",
+                    "no",
+                    "off",
+                }:
+                    compressed = False
+
+            elif compress is None:
+                compressed = False
 
             entries.append({
                 "index": index,
@@ -404,6 +423,7 @@ def database_assets(parsed: Parsed) -> list[dict]:
                 "heap_size": heap_size,
                 "absolute_offset": package_offset + heap_offset,
                 "compressed": compressed,
+                "compress_enabled": compress_enabled,
                 "codec": codec,
             })
             index += 1

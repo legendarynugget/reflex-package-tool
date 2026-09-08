@@ -157,30 +157,83 @@ def load_bxml_database_tool(database_path: Path):
 
 
 def database_entry_is_compressed(entry: dict) -> bool:
-    """
-    Return whether Database explicitly contains a <Compress> element
-    for this resource.
+    if "compress_enabled" in entry:
+        value = entry["compress_enabled"]
 
-    The package format used by Reflex only needs two states here:
-      - no Compress element -> raw/uncompressed resource
-      - Compress element    -> package-compressed resource
+        if value is None:
+            return False
 
-    bxml_database_tool versions may expose this as either a boolean
-    'compressed' field or a 'compress' field. Missing means no Compress.
-    """
+        if isinstance(value, bool):
+            return value
+
+        text = str(value).strip().lower()
+
+        if text in {
+            "",
+            "0",
+            "false",
+            "_bool:false",
+            "no",
+            "off",
+        }:
+            return False
+
+        if text in {
+            "1",
+            "true",
+            "_bool:true",
+            "yes",
+            "on",
+        }:
+            return True
+
+    # Backward compatibility with bxml_database_tool versions
+    # that only expose "compressed".
     if "compressed" in entry:
         return bool(entry["compressed"])
 
+    # Older alternative field name.
     if "compress" in entry:
         value = entry["compress"]
+
         if value is None:
             return False
+
         if isinstance(value, bool):
             return value
+
         if isinstance(value, dict):
+            # Some future/alternate decoder may expose:
+            # {"enabled": "_bool:false", "codec": "Zlib"}
+            if "enabled" in value:
+                enabled = value["enabled"]
+
+                if isinstance(enabled, bool):
+                    return enabled
+
+                text = str(enabled).strip().lower()
+
+                return text not in {
+                    "",
+                    "0",
+                    "false",
+                    "_bool:false",
+                    "no",
+                    "off",
+                }
+
             return True
+
         text = str(value).strip().lower()
-        return text not in {"", "0", "false", "none", "null"}
+
+        return text not in {
+            "",
+            "0",
+            "false",
+            "_bool:false",
+            "none",
+            "null",
+        }
 
     return False
 
@@ -3081,7 +3134,7 @@ class MainFrame(wx.Frame):
     def show_about(self, event=None):
         wx.MessageBox(
             f"{APP_NAME}\n\n"
-            "A tool for working with game archives for MX vs ATV Reflex in the .package format.\n\nVersion: 1.3.3\nAuthor: Daniil Korochansky\nLicense: GPLv3.0",
+            "A tool for working with game archives for MX vs ATV Reflex in the .package format.\n\nVersion: 1.3.4\nAuthor: Daniil Korochansky\nLicense: GPLv3.0",
             "About",
             wx.OK | wx.ICON_INFORMATION,
         )
