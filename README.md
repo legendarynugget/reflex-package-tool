@@ -5,8 +5,7 @@
 [![License](https://img.shields.io/github/license/daniilkorochansky/reflex-package-tool)](https://github.com/daniilkorochansky/reflex-package-tool/blob/main/LICENSE)
 
 # Reflex Package Tool
-<img width="766" height="433" alt="image" src="https://github.com/user-attachments/assets/66d9b494-dc28-41f5-a7ef-c9903c603f9a" />
-
+<img width="766" height="499" alt="image" src="https://github.com/user-attachments/assets/44e701cc-ff68-4aaa-a43b-a0ecb374086a" />
 
 A tool for viewing, extracting, and replacing MX vs ATV Reflex game resources from .package game archives.
 
@@ -18,6 +17,7 @@ The tool uses [XMem Helper](https://github.com/daniilkorochansky/xmem-helper), w
 + Replace resources inside packages.
 + Build-in `Texture Converter`.
 + Build-in `Localization Editor`.
++ Build-in `Sound Bank Manager` ([ffmpeg.exe](https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip) is required in the folder with `Reflex Package Tool.exe`).
 + Package optimization.
 + Append-only resource replacement.
 
