@@ -17,7 +17,7 @@ The tool uses [XMem Helper](https://github.com/daniilkorochansky/xmem-helper), w
 + Replace resources inside packages.
 + Build-in `Texture Converter`.
 + Build-in `Localization Editor`.
-+ Build-in `Sound Bank Manager`.
++ Build-in `Sound Bank Manager` ([ffmpeg.exe](https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip) is required in the folder with `Reflex Package Tool.exe`).
 + Package optimization.
 + Append-only resource replacement.
 
